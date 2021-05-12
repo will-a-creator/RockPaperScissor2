@@ -1,63 +1,92 @@
-function computerPlay(){
-    let randomNum = Math.floor(Math.random() * 9) + 1;
-    if (randomNum <= 3){
-        return "Rock";
-    } else if (randomNum <=6 ){
-        return "Paper";
-    } else {
-        return "Scissors";
-    }
-}
-let playerScore = 0;
-let computerScore = 0;
+const game = ()=> {
+    let pScore = 0;
+    let cScore = 0;
 
-function playRound(playerSelection, computerSelection){
-    let choice = playerSelection.toUpperCase();
-    let computerChoice = computerSelection.toUpperCase();
 
-    let result = '';
-    if(computerChoice === 'ROCK'){
-        if(choice === 'ROCK'){
-            result = 'Draw!';
-        } else if (choice === 'PAPER'){
-            result = 'You win! Paper beats rock';
-            playerScore++;
-        } else {
-            result = 'You lose! Rock beats scissors';
-            computerScore++;
-        }
-    }
-    if(computerChoice === 'SCISSORS'){
-        if(choice === 'ROCK'){
-            result = 'You win! Rock beats scissors';
-            playerScore++;
-        } else if (choice === 'PAPER'){
-            result = 'You lose! scissors beats paper';
-            computerScore++;
-        } else {
-            result = 'Draw!';
-        }
-    }
-    if(computerChoice === 'PAPER'){
-        if(choice === 'ROCK'){
-            result = 'You lose! Paper beats rock';
-            computerScore++;
-        } else if (choice === 'PAPER'){
-            result = 'Draw!';
-        } else {
-            result = 'You win! Scissors beats paper';
-            playerScore++;
-        }
-    }
-    return result;
-}
-
-const buttons = document.querySelectorAll('input');
-buttons.forEach(button => {
-    button.addEventListener('click', function(){
-        console.log(playRound(button.value, computerPlay));
-        })
-    })
     
 
+//play match
+const playMatch = () => {
+    const options = document.querySelectorAll('.options button');
+
+    //computer options
+    const computerOptions = ['rock', 'paper', 'scissors'];
+
+    options.forEach(option => {
+        option.addEventListener('click', function(){
+            //computer choice
+            const computerNumber = Math.floor(Math.random() * 3);
+            const computerChoice = computerOptions[computerNumber];
+            //compare hands
+            compareHands(this.textContent, computerChoice);
+
+            playerHand.src -   `./assets/${this.textContent}.png`;
+            computerHand.src -   `./assets/${computerChoice}.png`;
+        });
+    } );
+};
+const updateScore = () =>{
+    const playerScore = document.querySelector('.player-score p');
+    const computerScore = document.querySelector('.computer-score p');
+    playerScore.textContent = pScore; 
+    computerScore.textContent = cScore; 
+}
+
+const compareHands = (playerChoice, computerChoice) => {
+    const winner = document.querySelector('.winner');
+    //tie check
+    if(playerChoice === computerChoice){
+        winner.textContent = 'It is a tie';
+        return;
+    }
+    //check for rock
+    if(playerChoice === 'rock'){
+        if (computerChoice ==='scissors'){
+            winner.textContent = 'Player Wins'
+            pScore++;
+            updateScore();
+            return;
+        } else{
+            winner.textContent = 'Computer Wins';
+            cScore++;
+            updateScore();
+            return;
+        }
+    }
+    //check for paper
+    if(playerChoice === 'paper'){
+        if (computerChoice ==='scissors'){
+            winner.textContent = 'Computer Wins'
+            cScore++;
+            updateScore();
+            return;
+        } else{
+            winner.textContent = 'Player Wins';
+            pScore++;
+            updateScore();
+            return;
+        }
+    }
+    //check for scissors
+    if(playerChoice === 'scissors'){
+        if (computerChoice ==='rock'){
+            winner.textContent = 'Computer Wins'
+            cScore++;
+            updateScore();
+            return;
+        } else{
+            winner.textContent = 'Player Wins';
+            pScore++;
+            updateScore();
+            return;
+        }
+    }
+}
+
+
+
+playMatch();
+};
+
+game();
 
